@@ -18,6 +18,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
+import net.stone_labs.workinggraves.compat.InventoryExtensions;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -129,6 +130,11 @@ public record Grave(ServerWorld world, BlockPos position)
 
         for (ItemStack stack : playerInventory.main)
             saveStack.accept(stack);
+
+        for (InventoryExtensions extension : InventoryExtensions.values())
+            if (extension.isEnabled())
+                for (ItemStack stack : extension.getExtension().getItems(player))
+                    saveStack.accept(stack);
 
         playerInventory.clear();
 
